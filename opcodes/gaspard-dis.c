@@ -39,6 +39,9 @@ static const char * reg_names[16] =
   { "$fp", "$sp", "$r0", "$r1", "$r2", "$r3", "$r4", "$r5",
     "$r6", "$r7", "$r8", "$r9", "$r10", "$r11", "$r12", "$r13" };
 
+
+extern const struct opcode_chiara opcodes [];
+
 int
 print_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
 {

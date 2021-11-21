@@ -1,6 +1,5 @@
 /* gaspard-opc.c -- Definitions for gaspard opcodes.
    Copyright (C) 2009-2021 Free Software Foundation, Inc.
-   Contributed by Anthony Green (green@gaspardlogic.com).
 
    This file is part of the GNU opcodes library.
 
@@ -21,6 +20,262 @@
 
 #include "sysdep.h"
 #include "opcode/gaspard.h"
+
+
+
+void or(struct opcode_chiara *s) {
+
+
+}
+void xor(struct opcode_chiara *s) {
+
+
+}
+void and(struct opcode_chiara *s) {
+
+
+}
+void not(struct opcode_chiara *s) {
+
+
+}
+
+void shfl(struct opcode_chiara *s) {
+
+
+}
+
+void shfr(struct opcode_chiara *s) {
+
+
+}
+
+
+void mult(struct opcode_chiara *s) {
+
+
+}
+
+void add(struct opcode_chiara *s) {
+
+
+}
+
+void addc(struct opcode_chiara *s) {
+
+
+}
+
+void subc(struct opcode_chiara *s) {
+
+
+}
+
+void sub(struct opcode_chiara *s) {
+
+
+}
+
+void inc(struct opcode_chiara *s) {
+
+
+}
+
+void dec(struct opcode_chiara *s) {
+
+
+}
+void modul(struct opcode_chiara *s) {
+
+
+}
+
+
+void div_(struct opcode_chiara *s) {
+
+
+}
+
+void divs(struct opcode_chiara *s) {
+
+
+}
+
+void cmp(struct opcode_chiara *s) {
+
+
+}
+
+void disp(struct opcode_chiara *s) {
+
+
+}
+
+void dispa(struct opcode_chiara *s) {
+
+
+}
+void disp_imm_to_pointer(struct opcode_chiara *s) {
+
+
+}
+
+void disp_pointer_to_imm(struct opcode_chiara *s) {
+
+
+}
+
+void push(struct opcode_chiara *s) {
+
+
+}
+
+void pop(struct opcode_chiara *s) {
+
+
+}
+void prcfg(struct opcode_chiara *s) {
+
+
+}
+
+void ret(struct opcode_chiara *s) {
+
+
+}
+
+void syscall_(struct opcode_chiara *s) {
+
+
+}
+
+void void_(struct opcode_chiara *s) {
+
+
+}
+
+void calle(struct opcode_chiara *s) {
+
+
+}
+
+void callz(struct opcode_chiara *s) {
+
+
+}
+
+void callc(struct opcode_chiara *s) {
+
+
+}
+
+void callo(struct opcode_chiara *s) {
+
+
+}
+
+void callrz(struct opcode_chiara *s) {
+
+
+}
+void callrc(struct opcode_chiara *s) {
+
+
+}
+
+void callro(struct opcode_chiara *s) {
+
+
+}
+
+void dispab(struct opcode_chiara *s) {
+
+
+}
+
+void dispab_read(struct opcode_chiara *s) {
+
+
+}
+
+void dispas_write(struct opcode_chiara *s) {
+
+
+}
+
+void dispas_read(struct opcode_chiara *s) {
+
+
+}
+
+void dispal_write(struct opcode_chiara *s) {
+
+
+}
+
+void dispal_read(struct opcode_chiara *s) {
+
+
+}
+struct opcode_chiara opcodes [] = {
+
+  {"or",10,2,or},
+  {"xor",8,2,xor},
+  {"and",9,2,and},
+  {"not",11,1,not},
+  {"shfl",18,2,shfl},
+  {"shfr",13,2,shfr},
+
+  {"mult",7,2,mult},
+  {"add",46,2,add},
+  {"addc",26,2,addc},
+  {"sub",5,2,sub},
+  {"subc",27,2,subc},
+  {"inc",4,1,inc},
+  {"dec",4,1,dec},
+  {"modul",25,2,modul},
+  {"div",28,2,div_},
+  {"divs",29,2,divs},
+  {"cmp",16,2,cmp},
+  {"disp",44,2,disp},
+  {"dispa",3,2,dispa},
+  {"dispa",30,2,disp_imm_to_pointer},
+  {"dispa",31,2,disp_pointer_to_imm},
+  {"push",35,1,push},
+  {"pop",35,1,pop},
+  {"prcfg",150,1,prcfg},
+  {"ret",32,1,ret},
+  {"syscall",36,1,syscall_},
+  {"void",0,1,void_},
+  {"calle",18,1,calle},
+  {"callz",19,1,callz},
+  {"callc",20,1,callc},
+  {"callo",21,1,callo},
+  {"callrz",22,1,callrz},
+  {"callrc",23,1,callrc},
+  {"callro",24,1,callro},
+  {"dispab",112,1,dispab},
+  {"dispab",111,1,dispab_read},
+  {"dispas",40,1,dispas_write},
+  {"dispas",41,1,dispas_read},
+  {"dispal",45,1,dispal_write},
+  {"dispal",47,1,dispal_read},
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* The gaspard processor's 16-bit instructions come in two forms:
 
@@ -209,3 +464,7 @@ const gaspard_opc_info_t gaspard_form3_opc_info[16] =
     { 0x0e, gaspard_BAD,     "bad" },
     { 0x0f, gaspard_BAD,     "bad" }  /* Reserved as bad.  */
   };
+
+
+
+

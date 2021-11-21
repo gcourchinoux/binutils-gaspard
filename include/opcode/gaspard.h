@@ -71,3 +71,55 @@ typedef struct gaspard_opc_info_t
 extern const gaspard_opc_info_t gaspard_form1_opc_info[128];
 extern const gaspard_opc_info_t gaspard_form2_opc_info[4];
 extern const gaspard_opc_info_t gaspard_form3_opc_info[16];
+
+
+
+struct opcode_chiara{
+  char *name;
+  unsigned char opcode;
+  unsigned char num_of_op;// le nombre d'opérandes max 3
+
+  void (*handler)(struct opcode_chiara *s);
+
+};
+
+void or(struct opcode_chiara *s);
+void xor(struct opcode_chiara *s);
+void and(struct opcode_chiara *s);
+void not(struct opcode_chiara *s);
+void shfl(struct opcode_chiara *s);
+void shfr(struct opcode_chiara *s);
+void mult(struct opcode_chiara *s);
+void add(struct opcode_chiara *s);
+void addc(struct opcode_chiara *s);
+void subc(struct opcode_chiara *s);
+void sub(struct opcode_chiara *s);
+void inc(struct opcode_chiara *s);
+void dec(struct opcode_chiara *s);
+void modul(struct opcode_chiara *s);
+void div_(struct opcode_chiara *s);
+void divs(struct opcode_chiara *s);
+void cmp(struct opcode_chiara *s);
+void disp(struct opcode_chiara *s);
+void dispa(struct opcode_chiara *s);
+void disp_imm_to_pointer(struct opcode_chiara *s);
+void disp_pointer_to_imm(struct opcode_chiara *s);
+void push(struct opcode_chiara *s);
+void pop(struct opcode_chiara *s);
+void prcfg(struct opcode_chiara *s);
+void ret(struct opcode_chiara *s);
+void syscall_(struct opcode_chiara *s);
+void void_(struct opcode_chiara *s);
+void calle(struct opcode_chiara *s);
+void callz(struct opcode_chiara *s);
+void callc(struct opcode_chiara *s);
+void callo(struct opcode_chiara *s);
+void callrz(struct opcode_chiara *s);
+void callrc(struct opcode_chiara *s);
+void callro(struct opcode_chiara *s);
+void dispab(struct opcode_chiara *s);
+void dispab_read(struct opcode_chiara *s);
+void dispas_write(struct opcode_chiara *s);
+void dispas_read(struct opcode_chiara *s);
+void dispal_write(struct opcode_chiara *s);
+void dispal_read(struct opcode_chiara *s);
