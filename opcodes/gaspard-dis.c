@@ -42,8 +42,36 @@ static const char * reg_names[16] =
 
 extern const struct opcode_chiara opcodes [];
 
+
 int
 print_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
+{
+
+int length = 2;
+  int status;
+  stream = info->stream;
+  unsigned long iword;
+  bfd_byte *buffer;
+printf("init ok \n");
+  if ((status = info->read_memory_func (addr, buffer, 1, info))) {
+
+return 1;
+  }
+    
+for(int x = 0;x<39;x++) {
+
+if(*buffer == opcodes[x].opcode) {
+
+
+}
+
+
+}
+
+
+}
+int
+p2rint_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
 {
   int length = 2;
   int status;

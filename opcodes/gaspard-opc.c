@@ -225,7 +225,6 @@ struct opcode_chiara opcodes [] = {
   {"not",11,1,not},
   {"shfl",18,2,shfl},
   {"shfr",13,2,shfr},
-
   {"mult",7,2,mult},
   {"add",46,2,add},
   {"addc",26,2,addc},
