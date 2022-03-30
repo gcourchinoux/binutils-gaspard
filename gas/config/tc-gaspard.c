@@ -390,7 +390,9 @@ md_assemble (char *str)
 
 
 {
-
+    char *output;
+    unsigned char iword;
+    
 
 while(*str != '\0') {
 
@@ -430,7 +432,8 @@ struct opcode_chiara tmp ;
             } else {
 
               // generer l'instruction 
-
+                output = frag_more(3);
+                output[0] = tmp.opcode;
                 unsigned char *gpr1 = build_argv(str); 
                   printf("gpr  1%s \n",gpr1);
 
@@ -444,7 +447,13 @@ struct opcode_chiara tmp ;
                 str+= strlen(gpr2);
 
                 printf("gpr  2%s \n",gpr2);
-            
+                
+                char gpr1_final = gpr_fpr(gpr1);
+                char gpr2_final = gpr_fpr(gpr2);
+                output[1]  = gpr1_final;
+                output[2] = gpr2_final;
+                md_number_to_chars (output, 0, 3);
+
             }
           break; 
           
@@ -1049,9 +1058,7 @@ md_apply_fix (fixS *fixP ATTRIBUTE_UNUSED,
 void
 md_number_to_chars (char * ptr, valueT use, int nbytes)
 {
-  if (target_big_endian)
-    number_to_chars_bigendian (ptr, use, nbytes);
-  else
+ 
     number_to_chars_littleendian (ptr, use, nbytes);
 }
 
