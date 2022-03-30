@@ -429,7 +429,112 @@ struct opcode_chiara tmp ;
                 // syscall
 
 
-            } else {
+            } else if(op == 11) {
+                // not
+                output = frag_more(2);
+                output[0] = tmp.opcode;
+                unsigned char *gpr1 = build_argv(str);
+                str+= strlen(gpr1);
+                char gpr1_final = gpr_fpr(gpr1);
+                output[1] = gpr1_final ;
+                md_number_to_chars (output, 0, 2);
+
+            } else if(op == 4) {
+                // inc
+                output = frag_more(2);
+                output[0] = tmp.opcode;
+                unsigned char *gpr1 = build_argv(str);
+                str+= strlen(gpr1);
+                char gpr1_final = gpr_fpr(gpr1);
+                output[1] = gpr1_final ;
+                md_number_to_chars (output, 0, 2);
+
+            } else if(op == 34) {
+                // dec
+                output = frag_more(2);
+                output[0] = tmp.opcode;
+                unsigned char *gpr1 = build_argv(str);
+                str+= strlen(gpr1);
+                char gpr1_final = gpr_fpr(gpr1);
+                output[1] = gpr1_final ;
+                md_number_to_chars (output, 0, 2);
+
+            } else if(op == 35) {
+                // push
+                output = frag_more(2);
+                output[0] = tmp.opcode;
+                unsigned char *gpr1 = build_argv(str);
+                str+= strlen(gpr1);
+                char gpr1_final = gpr_fpr(gpr1);
+                output[1] = gpr1_final ;
+                md_number_to_chars (output, 0, 2);
+
+            } else if(op == 33) {
+                // pop
+                output = frag_more(2);
+                output[0] = tmp.opcode;
+                unsigned char *gpr1 = build_argv(str);
+                str+= strlen(gpr1);
+                char gpr1_final = gpr_fpr(gpr1);
+                output[1] = gpr1_final ;
+                md_number_to_chars (output, 0, 2);
+
+            } else if(op == 150) {
+                // prcfg
+            } else if(op == 32) {
+                // ret
+                output = frag_more(1);
+                output[0] = tmp.opcode;
+                md_number_to_chars (output, 0, 1);
+            } else if(op == 0) {
+                // void
+                output = frag_more(1);
+                output[0] = tmp.opcode;
+                md_number_to_chars (output, 0, 1);
+
+            } else if(op == 18) {
+                // calle
+                
+            }  else if(op == 19) {
+                // callz
+                
+            }  else if(op == 20) {
+                // callc
+                
+            }  else if(op == 21) {
+                // callo
+                
+            }  else if(op == 22) {
+                // callrz
+                
+            }  else if(op == 23) {
+                // callrc
+                
+            }  else if(op == 24) {
+                // callro
+                
+            }  else if(op == 112) {
+                // dispab
+                
+            }  else if(op == 111) {
+                // dispab_read
+                
+            }  else if(op == 40) {
+                // dispas_write
+                
+            }  else if(op == 41) {
+                // dispas_read
+                
+            }  else if(op == 45) {
+                // dispal_write
+                
+            }  else if(op == 47) {
+                // dispal_read
+                
+            }
+            
+            
+            else {
 
               // generer l'instruction 
                 output = frag_more(3);

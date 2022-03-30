@@ -217,6 +217,7 @@ void dispal_read(struct opcode_chiara *s) {
 
 
 }
+// controler les valeurs des opcodes par rapport au livre 
 struct opcode_chiara opcodes [] = {
 
   {"or",10,2,or},
@@ -231,7 +232,7 @@ struct opcode_chiara opcodes [] = {
   {"sub",5,2,sub},
   {"subc",27,2,subc},
   {"inc",4,1,inc},
-  {"dec",4,1,dec},
+  {"dec",34,1,dec},
   {"modul",25,2,modul},
   {"div",28,2,div_},
   {"divs",29,2,divs},
@@ -241,7 +242,7 @@ struct opcode_chiara opcodes [] = {
   {"dispa",30,2,disp_imm_to_pointer},
   {"dispa",31,2,disp_pointer_to_imm},
   {"push",35,1,push},
-  {"pop",35,1,pop},
+  {"pop",33,1,pop},
   {"prcfg",150,1,prcfg},
   {"ret",32,1,ret},
   {"syscall",36,1,syscall_},
