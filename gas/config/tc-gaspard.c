@@ -26,6 +26,8 @@
 #include "elf/gaspard.h"
 
 extern const gaspard_opc_info_t gaspard_opc_info[128];
+extern const struct opcode_chiara opcodes[];  // 39 opcodes 
+
 
 const char comment_chars[]        = "#";
 const char line_separator_chars[] = ";";
@@ -144,12 +146,337 @@ parse_register_operand (char **ptr)
   return reg + 2;
 }
 
+unsigned char gpr_fpr(char *argument) {
+	printf("argument %s \n",argument);
+	if(strcmp(argument,"GPR0") == 0) {
+		//~ return 34;
+		return 0;
+		} else if(strcmp(argument,"GPR1") == 0) {
+			return 1;
+			}
+		 else if(strcmp(argument,"GPR2") == 0) {
+			return 2;
+			}
+		 else if(strcmp(argument,"GPR3") == 0) {
+			return 3;
+			}
+		 else if(strcmp(argument,"GPR4") == 0) {
+			return 4;
+			}
+		 else if(strcmp(argument,"GPR5") == 0) {
+			return 5;
+			}
+		 else if(strcmp(argument,"GPR6") == 0) {
+			return 6;
+			}
+		 else if(strcmp(argument,"GPR7") == 0) {
+			return 7;
+			}
+		 else if(strcmp(argument,"GPR8") == 0) {
+			return 8;
+			}
+		 else if(strcmp(argument,"GPR9") == 0) {
+			return 9;
+			}
+		 else if(strcmp(argument,"GPR10") == 0) {
+			return 10;
+			}
+		 else if(strcmp(argument,"GPR11") == 0) {
+			return 11;
+			}
+		 else if(strcmp(argument,"GPR12") == 0) {
+			return 12;
+			}
+		 else if(strcmp(argument,"GPR13") == 0) {
+			return 13;
+			}
+		 else if(strcmp(argument,"GPR14") == 0) {
+			return 14;
+			}
+		 else if(strcmp(argument,"GPR15") == 0) {
+			return 15;
+			}
+		 else if(strcmp(argument,"GPR16") == 0) {
+			return 16;
+			}
+		 else if(strcmp(argument,"GPR17") == 0) {
+			return 17;
+			}
+		 else if(strcmp(argument,"GPR18") == 0) {
+			return 18;
+			}
+		 else if(strcmp(argument,"GPR19") == 0) {
+			return 19;
+			}
+		 else if(strcmp(argument,"GPR20") == 0) {
+			return 20;
+			}
+		 else if(strcmp(argument,"GPR21") == 0) {
+			return 21;
+			}
+		 else if(strcmp(argument,"GPR22") == 0) {
+			return 22;
+			}
+		 else if(strcmp(argument,"GPR23") == 0) {
+			return 23;
+			}
+		 else if(strcmp(argument,"GPR24") == 0) {
+			return 24;
+			}
+		 else if(strcmp(argument,"GPR25") == 0) {
+			return 25;
+			}
+		 else if(strcmp(argument,"GPR26") == 0) {
+			return 26;
+			}
+		 else if(strcmp(argument,"GPR27") == 0) {
+			return 27;
+			}
+		 else if(strcmp(argument,"GPR28") == 0) {
+			return 28;
+			}
+		 else if(strcmp(argument,"GPR29") == 0) {
+			return 29;
+			}
+		 else if(strcmp(argument,"GPR30") == 0) {
+			return 30;
+			}
+		 else if(strcmp(argument,"GPR31") == 0) {
+			return 31;
+			}   else if(strcmp(argument,"FPR0") == 0)   { 
+ return 32; 
+ } 
+  else if(strcmp(argument,"FPR1") == 0)   { 
+ return 33; 
+ } 
+  else if(strcmp(argument,"FPR2") == 0)   { 
+ return 34; 
+ } 
+  else if(strcmp(argument,"FPR3") == 0)   { 
+ return 35; 
+ } 
+  else if(strcmp(argument,"FPR4") == 0)   { 
+ return 36; 
+ } 
+  else if(strcmp(argument,"FPR5") == 0)   { 
+ return 37; 
+ } 
+  else if(strcmp(argument,"FPR6") == 0)   { 
+ return 38; 
+ } 
+  else if(strcmp(argument,"FPR7") == 0)   { 
+ return 39; 
+ } 
+  else if(strcmp(argument,"FPR8") == 0)   { 
+ return 40; 
+ } 
+  else if(strcmp(argument,"FPR9") == 0)   { 
+ return 41; 
+ } 
+  else if(strcmp(argument,"FPR10") == 0)   { 
+ return 42; 
+ } 
+  else if(strcmp(argument,"FPR11") == 0)   { 
+ return 43; 
+ } 
+  else if(strcmp(argument,"FPR12") == 0)   { 
+ return 44; 
+ } 
+  else if(strcmp(argument,"FPR13") == 0)   { 
+ return 45; 
+ } 
+  else if(strcmp(argument,"FPR14") == 0)   { 
+ return 46; 
+ } 
+  else if(strcmp(argument,"FPR15") == 0)   { 
+ return 47; 
+ } 
+  else if(strcmp(argument,"FPR16") == 0)   { 
+ return 48; 
+ } 
+  else if(strcmp(argument,"FPR17") == 0)   { 
+ return 49; 
+ } 
+  else if(strcmp(argument,"FPR18") == 0)   { 
+ return 50; 
+ } 
+  else if(strcmp(argument,"FPR19") == 0)   { 
+ return 51; 
+ } 
+  else if(strcmp(argument,"FPR20") == 0)   { 
+ return 52; 
+ } 
+  else if(strcmp(argument,"FPR21") == 0)   { 
+ return 53; 
+ } 
+  else if(strcmp(argument,"FPR22") == 0)   { 
+ return 54; 
+ } 
+  else if(strcmp(argument,"FPR23") == 0)   { 
+ return 55; 
+ } 
+  else if(strcmp(argument,"FPR24") == 0)   { 
+ return 56; 
+ } 
+  else if(strcmp(argument,"FPR25") == 0)   { 
+ return 57; 
+ } 
+  else if(strcmp(argument,"FPR26") == 0)   { 
+ return 58; 
+ } 
+  else if(strcmp(argument,"FPR27") == 0)   { 
+ return 59; 
+ } 
+  else if(strcmp(argument,"FPR28") == 0)   { 
+ return 60; 
+ } 
+  else if(strcmp(argument,"FPR29") == 0)   { 
+ return 61; 
+ } 
+  else if(strcmp(argument,"FPR30") == 0)   { 
+ return 62; 
+ } 
+  else if(strcmp(argument,"FPR31") == 0)   { 
+ return 63; 
+ } 
+		 else if(strcmp(argument,"RETGPR") == 0) {
+			return 32;
+			} else {
+			
+				return 254;
+				}
+	
+	
+	}
+char * build_argv(char *str ) {
+
+int status;
+  char *final = malloc(5);
+  
+  while(1) {
+    if(str[status] == ',' || str[status] == '\n') {
+      final[status] == '\0';
+      break;
+    } 
+
+      final[status] = str[status];
+
+
+    status++;
+  }
+
+return final;
+
+
+}
+char *build_instruction(char *str) {
+
+int status;
+  char *final = malloc(5);
+  
+  while(str[status] != ' ') {
+
+
+      final[status] = str[status];
+
+
+    status++;
+  }
+
+return final;
+}
+void
+md_assemble (char *str)
+
+
+{
+
+
+while(*str != '\0') {
+
+    char * instr = build_instruction(str);
+    printf("instr %s \n",instr);
+    str+= strlen(instr);
+
+    printf("str %s \n",str);
+
+            bool ok =false;
+struct opcode_chiara tmp ;
+      for(int x =0;x<39;x++) {
+
+// parcourir les instructions 
+
+
+      tmp = opcodes[x]; 
+
+
+        if(strcmp(tmp.name,instr) == 0) {
+            ok = true;
+            break;
+
+
+        }        
+      }
+        if(ok == true) {
+            // nosu avons trouvé l'opcode incrementer ! 
+
+            char op  = tmp.opcode; 
+
+
+            if(op == 36) {
+                // syscall
+
+
+            } else {
+
+              // generer l'instruction 
+
+                unsigned char *gpr1 = build_argv(str); 
+                  printf("gpr  1%s \n",gpr1);
+
+                str+= strlen(gpr1);
+                if(*str == ',') {
+                  str++;
+                }
+               
+                unsigned char *gpr2 = build_argv(str); 
+               
+                str+= strlen(gpr2);
+
+                printf("gpr  2%s \n",gpr2);
+            
+            }
+          break; 
+          
+
+        } else {
+            // imprimer que nous troubons pas l'instruction 
+     as_fatal (_("Cannot find instruction ")); 
+
+
+
+
+        }
+
+
+
+  }
+
+
+}
+
+
+
+
+
+
+
 /* This is the guts of the machine-dependent assembler.  STR points to
    a machine dependent instruction.  This function is supposed to emit
    the frags/bytes it assembles to.  */
 
 void
-md_assemble (char *str)
+m2d_assemble (char *str)
 {
   char *op_start;
   char *op_end;
