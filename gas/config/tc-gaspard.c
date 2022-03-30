@@ -354,7 +354,7 @@ int status;
   char *final = malloc(5);
   
   while(1) {
-    if(str[status] == ',' || str[status] == '\n') {
+    if(str[status] == ',' || str[status] == '\n' || str[status] == '\0') {
       final[status] == '\0';
       break;
     } 
@@ -439,7 +439,7 @@ struct opcode_chiara tmp ;
                   str++;
                 }
                
-                unsigned char *gpr2 = build_argv(str); 
+                unsigned char *gpr2 = build_argv(str);
                
                 str+= strlen(gpr2);
 
