@@ -50,23 +50,14 @@ print_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
 int length = 2;
   int status;
   stream = info->stream;
-  unsigned long iword;
   bfd_byte *buffer;
-printf("init ok \n");
-  if ((status = info->read_memory_func (addr, buffer, 1, info))) {
+fpr = info->fprintf_func;
 
+  if ((status = info->read_memory_func (addr, buffer, 1, info))) {
+      printf("fatal erreur lecture \n");
 return 1;
   }
-    
-for(int x = 0;x<39;x++) {
-
-if(*buffer == opcodes[x].opcode) {
-
-
-}
-
-
-}
+  
 
 
 }
