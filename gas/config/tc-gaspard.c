@@ -145,7 +145,16 @@ parse_register_operand (char **ptr)
 
   return reg + 2;
 }
-
+//todo : faire les hexas et les binaires
+unsigned long long gaspard_atol(char* str){
+    return atol(str);
+}
+unsigned char gaspard_atol_8bits(char *str) {
+    
+    
+    return atol(str);
+    
+}
 unsigned char gpr_fpr(char *argument) {
 	printf("argument %s \n",argument);
 	if(strcmp(argument,"GPR0") == 0) {
@@ -428,6 +437,12 @@ struct opcode_chiara tmp ;
             if(op == 36) {
                 // syscall
 
+                output = frag_more(2);
+                output[0] = tmp.opcode;
+                unsigned char *gpr1 = build_argv(str);
+                str+= strlen(gpr1);
+                output[1] = gaspard_atol_8bits(gpr1) ;
+                md_number_to_chars (output, 0, 2);
 
             } else if(op == 11) {
                 // not
@@ -494,43 +509,303 @@ struct opcode_chiara tmp ;
 
             } else if(op == 18) {
                 // calle
+                output = frag_more(9);
+                output[0] = tmp.opcode;
+                unsigned char *nombre = build_argv(str);
+                str+= strlen(nombre);
+                unsigned long long number = gaspard_atol(nombre);
+                output[0] = number;
+                output[1] = number << 8;
+                output[2] = number << 16;
+                output[3] = number << 24;
+                output[4] = number << 32;
+                output[5] = number << 40;
+                output[6] = number << 48;
+                output[7] = number << 48;
+                output[8] = number << 56;
+                md_number_to_chars (output, 0, 9);
+
                 
             }  else if(op == 19) {
                 // callz
-                
+                output = frag_more(9);
+                output[0] = tmp.opcode;
+                unsigned char *nombre = build_argv(str);
+                str+= strlen(nombre);
+                unsigned long long number = gaspard_atol(nombre);
+                output[0] = number;
+                output[1] = number << 8;
+                output[2] = number << 16;
+                output[3] = number << 24;
+                output[4] = number << 32;
+                output[5] = number << 40;
+                output[6] = number << 48;
+                output[7] = number << 48;
+                output[8] = number << 56;
+                md_number_to_chars (output, 0, 9);
+
             }  else if(op == 20) {
                 // callc
-                
+                output = frag_more(9);
+                output[0] = tmp.opcode;
+                unsigned char *nombre = build_argv(str);
+                str+= strlen(nombre);
+                unsigned long long number = gaspard_atol(nombre);
+                output[0] = number;
+                output[1] = number << 8;
+                output[2] = number << 16;
+                output[3] = number << 24;
+                output[4] = number << 32;
+                output[5] = number << 40;
+                output[6] = number << 48;
+                output[7] = number << 48;
+                output[8] = number << 56;
+                md_number_to_chars (output, 0, 9);
+
             }  else if(op == 21) {
                 // callo
-                
+                output = frag_more(9);
+                output[0] = tmp.opcode;
+                unsigned char *nombre = build_argv(str);
+                str+= strlen(nombre);
+                unsigned long long number = gaspard_atol(nombre);
+                output[0] = number;
+                output[1] = number << 8;
+                output[2] = number << 16;
+                output[3] = number << 24;
+                output[4] = number << 32;
+                output[5] = number << 40;
+                output[6] = number << 48;
+                output[7] = number << 48;
+                output[8] = number << 56;
+                md_number_to_chars (output, 0, 9);
+
             }  else if(op == 22) {
                 // callrz
-                
+                output = frag_more(9);
+                output[0] = tmp.opcode;
+                unsigned char *nombre = build_argv(str);
+                str+= strlen(nombre);
+                unsigned long long number = gaspard_atol(nombre);
+                output[0] = number;
+                output[1] = number << 8;
+                output[2] = number << 16;
+                output[3] = number << 24;
+                output[4] = number << 32;
+                output[5] = number << 40;
+                output[6] = number << 48;
+                output[7] = number << 48;
+                output[8] = number << 56;
+                md_number_to_chars (output, 0, 9);
+
             }  else if(op == 23) {
                 // callrc
-                
+                output = frag_more(9);
+                output[0] = tmp.opcode;
+                unsigned char *nombre = build_argv(str);
+                str+= strlen(nombre);
+                unsigned long long number = gaspard_atol(nombre);
+                output[0] = number;
+                output[1] = number << 8;
+                output[2] = number << 16;
+                output[3] = number << 24;
+                output[4] = number << 32;
+                output[5] = number << 40;
+                output[6] = number << 48;
+                output[7] = number << 48;
+                output[8] = number << 56;
+                md_number_to_chars (output, 0, 9);
+
             }  else if(op == 24) {
                 // callro
-                
+                output = frag_more(9);
+                output[0] = tmp.opcode;
+                unsigned char *nombre = build_argv(str);
+                str+= strlen(nombre);
+                unsigned long long number = gaspard_atol(nombre);
+                output[1] = number;
+                output[2] = number << 8;
+                output[3] = number << 16;
+                output[4] = number << 24;
+                output[5] = number << 32;
+                output[6] = number << 40;
+                output[7] = number << 48;
+                output[8] = number << 48;
+                output[9] = number << 56;
+                md_number_to_chars (output, 0, 9);
+
             }  else if(op == 112) {
                 // dispab
-                
+                output = frag_more(10);
+                output[0] = tmp.opcode;
+                unsigned char *argv1 = build_argv(str);
+
+                str+= strlen(argv1);
+                if(*str == ',') {
+                  str++;
+                }
+               
+                unsigned char *argv2 = build_argv(str);
+               
+                str+= strlen(argv2);
+                unsigned long long adresse = gaspard_atol(argv1);
+                output[1] = adresse;
+                output[2] = adresse << 8;
+                output[3] = adresse << 16;
+                output[4] = adresse << 24;
+                output[5] = adresse << 32;
+                output[6] = adresse << 40;
+                output[7] = adresse << 48;
+                output[8] = adresse << 48;
+                output[9] = adresse << 56;
+                output[10] = gaspard_atol_8bits(argv2) ;
+                md_number_to_chars (output, 0, 10);
+
+   
             }  else if(op == 111) {
                 // dispab_read
-                
+                output = frag_more(10);
+                output[0] = tmp.opcode;
+                unsigned char *argv1 = build_argv(str);
+
+                str+= strlen(argv1);
+                if(*str == ',') {
+                  str++;
+                }
+               
+                unsigned char *argv2 = build_argv(str);
+               
+                str+= strlen(argv2);
+                unsigned long long adresse = gaspard_atol(argv1);
+                output[1] = adresse;
+                output[2] = adresse << 8;
+                output[3] = adresse << 16;
+                output[4] = adresse << 24;
+                output[5] = adresse << 32;
+                output[6] = adresse << 40;
+                output[7] = adresse << 48;
+                output[8] = adresse << 48;
+                output[9] = adresse << 56;
+                output[10] = gpr_fpr(argv2) ;
+                md_number_to_chars (output, 0, 10);
+
+   
             }  else if(op == 40) {
                 // dispas_write
-                
+                output = frag_more(11);
+                output[0] = tmp.opcode;
+                unsigned char *argv1 = build_argv(str);
+
+                str+= strlen(argv1);
+                if(*str == ',') {
+                  str++;
+                }
+               
+                unsigned char *argv2 = build_argv(str);
+               
+                str+= strlen(argv2);
+                unsigned long long adresse = gaspard_atol(argv1);
+                unsigned long long data = gaspard_atol(argv2);
+
+                output[1] = adresse;
+                output[2] = adresse << 8;
+                output[3] = adresse << 16;
+                output[4] = adresse << 24;
+                output[5] = adresse << 32;
+                output[6] = adresse << 40;
+                output[7] = adresse << 48;
+                output[8] = adresse << 48;
+                output[9] = adresse << 56;
+                output[10] = data ;
+                output[11] = data << 8 ;
+
+                md_number_to_chars (output, 0, 11);
+
             }  else if(op == 41) {
                 // dispas_read
-                
+                output = frag_more(10);
+                output[0] = tmp.opcode;
+                unsigned char *argv1 = build_argv(str);
+
+                str+= strlen(argv1);
+                if(*str == ',') {
+                  str++;
+                }
+               
+                unsigned char *argv2 = build_argv(str);
+               
+                str+= strlen(argv2);
+                unsigned long long adresse = gaspard_atol(argv1);
+                output[1] = adresse;
+                output[2] = adresse << 8;
+                output[3] = adresse << 16;
+                output[4] = adresse << 24;
+                output[5] = adresse << 32;
+                output[6] = adresse << 40;
+                output[7] = adresse << 48;
+                output[8] = adresse << 48;
+                output[9] = adresse << 56;
+                output[10] = gpr_fpr(argv2) ;
+                md_number_to_chars (output, 0, 10);
+
             }  else if(op == 45) {
                 // dispal_write
-                
+                output = frag_more(13);
+                output[0] = tmp.opcode;
+                unsigned char *argv1 = build_argv(str);
+
+                str+= strlen(argv1);
+                if(*str == ',') {
+                  str++;
+                }
+               
+                unsigned char *argv2 = build_argv(str);
+               
+                str+= strlen(argv2);
+                unsigned long long adresse = gaspard_atol(argv1);
+                unsigned long long data = gaspard_atol(argv2);
+
+                output[1] = adresse;
+                output[2] = adresse << 8;
+                output[3] = adresse << 16;
+                output[4] = adresse << 24;
+                output[5] = adresse << 32;
+                output[6] = adresse << 40;
+                output[7] = adresse << 48;
+                output[8] = adresse << 48;
+                output[9] = adresse << 56;
+                output[10] = data ;
+                output[11] = data << 8 ;
+                output[12] = data << 16 ;
+                output[13] = data << 24 ;
+
+                md_number_to_chars (output, 0, 13);
             }  else if(op == 47) {
                 // dispal_read
-                
+                output = frag_more(10);
+                output[0] = tmp.opcode;
+                unsigned char *argv1 = build_argv(str);
+
+                str+= strlen(argv1);
+                if(*str == ',') {
+                  str++;
+                }
+               
+                unsigned char *argv2 = build_argv(str);
+               
+                str+= strlen(argv2);
+                unsigned long long adresse = gaspard_atol(argv1);
+                output[1] = adresse;
+                output[2] = adresse << 8;
+                output[3] = adresse << 16;
+                output[4] = adresse << 24;
+                output[5] = adresse << 32;
+                output[6] = adresse << 40;
+                output[7] = adresse << 48;
+                output[8] = adresse << 48;
+                output[9] = adresse << 56;
+                output[10] = gpr_fpr(argv2) ;
+                md_number_to_chars (output, 0, 10);
             }
             
             
