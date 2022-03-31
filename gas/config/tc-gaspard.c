@@ -399,7 +399,7 @@ md_assemble (char *str)
 
 
 {
-    char *output;
+    unsigned char *output;
     unsigned char iword;
     
 
@@ -431,7 +431,7 @@ struct opcode_chiara tmp ;
         if(ok == true) {
             // nosu avons trouvé l'opcode incrementer ! 
 
-            char op  = tmp.opcode; 
+                unsigned char op  = tmp.opcode;
 
 
             if(op == 36) {
@@ -450,7 +450,7 @@ struct opcode_chiara tmp ;
                 output[0] = tmp.opcode;
                 unsigned char *gpr1 = build_argv(str);
                 str+= strlen(gpr1);
-                char gpr1_final = gpr_fpr(gpr1);
+                unsigned char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
                 md_number_to_chars (output, 0, 2);
 
@@ -460,7 +460,7 @@ struct opcode_chiara tmp ;
                 output[0] = tmp.opcode;
                 unsigned char *gpr1 = build_argv(str);
                 str+= strlen(gpr1);
-                char gpr1_final = gpr_fpr(gpr1);
+           unsigned      char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
                 md_number_to_chars (output, 0, 2);
 
@@ -470,7 +470,7 @@ struct opcode_chiara tmp ;
                 output[0] = tmp.opcode;
                 unsigned char *gpr1 = build_argv(str);
                 str+= strlen(gpr1);
-                char gpr1_final = gpr_fpr(gpr1);
+               unsigned char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
                 md_number_to_chars (output, 0, 2);
 
@@ -480,7 +480,7 @@ struct opcode_chiara tmp ;
                 output[0] = tmp.opcode;
                 unsigned char *gpr1 = build_argv(str);
                 str+= strlen(gpr1);
-                char gpr1_final = gpr_fpr(gpr1);
+               unsigned char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
                 md_number_to_chars (output, 0, 2);
 
@@ -490,12 +490,43 @@ struct opcode_chiara tmp ;
                 output[0] = tmp.opcode;
                 unsigned char *gpr1 = build_argv(str);
                 str+= strlen(gpr1);
-                char gpr1_final = gpr_fpr(gpr1);
+                unsigned char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
                 md_number_to_chars (output, 0, 2);
 
             } else if(op == 150) {
                 // prcfg
+                
+                output = frag_more(10);
+                output[0] = tmp.opcode; // 150
+                
+                unsigned char *mode = build_argv(str);
+                  printf("mode  %s \n",mode);
+
+                str+= strlen(mode);
+                if(*str == ',') {
+                  str++;
+                }
+               
+                unsigned char *adress = build_argv(str);
+               
+                str+= strlen(adress);
+                if(gaspard_atol_8bits(mode) > 3) {
+                    
+                    as_bad(_("prcfg must have operand between 1 and 3"));
+                }
+                output[1] = gaspard_atol_8bits(mode);
+                unsigned long long number = gaspard_atol(adress);
+
+                output[2] = number << 8;
+                output[3] = number << 16;
+                output[4] = number << 24;
+                output[5] = number << 32;
+                output[6] = number << 40;
+                output[7] = number << 48;
+                output[8] = number << 48;
+                output[9] = number << 56;
+                
             } else if(op == 32) {
                 // ret
                 output = frag_more(1);
@@ -812,9 +843,8 @@ struct opcode_chiara tmp ;
             else {
 
               // generer l'instruction 
-                output = frag_more(3);
-                output[0] = tmp.opcode;
-                unsigned char *gpr1 = build_argv(str); 
+               
+                unsigned char *gpr1 = build_argv(str);
                   printf("gpr  1%s \n",gpr1);
 
                 str+= strlen(gpr1);
@@ -827,13 +857,43 @@ struct opcode_chiara tmp ;
                 str+= strlen(gpr2);
 
                 printf("gpr  2%s \n",gpr2);
-                
-                char gpr1_final = gpr_fpr(gpr1);
-                char gpr2_final = gpr_fpr(gpr2);
+             unsigned   char gpr1_final = gpr_fpr(gpr1);
+               unsigned char gpr2_final = gpr_fpr(gpr2);
+                if(gpr2_final == 254 && *gpr2 == '0') {
+                    output = frag_more(3);
+                    output[0] = tmp.opcode;
+                    output[1]  = gpr1_final;
+                    output[2] = gpr2_final;
+                    md_number_to_chars (output, 0, 3);
+                    
+                } else if(gpr2_final == 254) {
+                    printf("gpr disp avec immediat \n");
+                    output = frag_more(3+8);
+                    output[0] = tmp.opcode;
+                    output[1]  = gpr1_final;
+                    output[2] = 66;
+                    unsigned long long data = gaspard_atol(gpr2);
+                    output[3] = data;
+                    output[4] = data << 8;
+                    output[5] = data << 16;
+                    output[6] = data << 24;
+                    output[7] = data << 32;
+                    output[8] = data << 40;
+                    output[9] = data << 48;
+                    output[10] = data << 48;
+                    output[11] = data << 56;
+                    md_number_to_chars (output, 0, 3+8);
+ 
+                }
+                else {
+                    printf("GPR0 et gpR0 \n");
+                output = frag_more(3);
+                output[0] = tmp.opcode;
+                // controler si cela n'est pas un immediat
                 output[1]  = gpr1_final;
                 output[2] = gpr2_final;
                 md_number_to_chars (output, 0, 3);
-
+                }
             }
           break; 
           
