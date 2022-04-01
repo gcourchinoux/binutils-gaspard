@@ -69,6 +69,38 @@ int length = 2;
         return 1;
     }
       switch(buffer[0]) {
+          case 36: {
+              // syscall
+              
+              
+              return 2;
+          }
+          case 11: {
+              
+              // not
+              
+              return 2;
+          }
+          case 4: {
+              // inc
+              
+              return 2;
+          }
+          case 34: {
+              // dec
+              
+              return 2;
+          }
+          case 35: {
+              // push
+              
+              return 2;
+          }
+          case 33: {
+              // pop
+              
+              return 2;
+          }
           case 150: {
               // prcfg
               bfd_byte buff_tmp[10];
@@ -84,11 +116,57 @@ int length = 2;
               
               return 10;
           }
+          case 32: {
+              // ret
+              return 1;
+          }
           case 0:{
-              fpr(stream,"void,","");
+              fpr(stream,"void","");
 
               
               return 1;
+          }
+          case 18: {
+              
+              // calle
+              
+              return 9;
+          }
+          case 19: {
+              
+              // callz
+              
+              return 9;
+          }
+          case 20: {
+              
+              // callc
+              
+              return 9;
+          }
+          case 21: {
+              
+              // callo
+              
+              return 9;
+          }
+          case 22: {
+              
+              // callrz
+              
+              return 9;
+          }
+          case 23: {
+              
+              // callrc
+              
+              return 9;
+          }
+          case 24: {
+              
+              // callro
+              
+              return 9;
           }
         default: {
             for(int x=  0;x<39;x++) {
