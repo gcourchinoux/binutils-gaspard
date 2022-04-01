@@ -42,27 +42,84 @@ static const char * reg_names[16] =
 
 extern const struct opcode_chiara opcodes [];
 
+void print_gpr_fpr(struct disassemble_info *info,bfd_byte  gpr_gpr) {
 
+    if(gpr_gpr > 31) {
+        fpr(stream,"FPR%d",gpr_gpr+31);
+        
+    } else {
+        fpr(stream,"GPR%d",gpr_gpr);
+
+    }
+    
+    
+}
 int
 print_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
 {
 
 int length = 2;
-  int status;
-  stream = info->stream;
-  bfd_byte *buffer;
-fpr = info->fprintf_func;
+    int status;
+    stream = info->stream;
+    bfd_byte buffer[4];
+  fpr = info->fprintf_func;
 
-  if ((status = info->read_memory_func (addr, buffer, 1, info))) {
-      printf("fatal erreur lecture \n");
-return 1;
-  }
-  
+    if ((status = info->read_memory_func (addr, buffer, 3, info))) {
+        info->memory_error_func (status, addr, info);
+        return 1;
+    }
+      switch(buffer[0]) {
+          case 150: {
+              // prcfg
+              bfd_byte buff_tmp[10];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              fpr(stream,"prcfg %d,",buff_tmp[1]);
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[2] |  (unsigned long long) buff_tmp[3] << 8 | (unsigned long long)  buff_tmp[4] << 16 |  (unsigned long long) buff_tmp[5] << 24 | (unsigned long long) buff_tmp[6] << 32 | (unsigned long long) buff_tmp[7] << 40 | (unsigned long long) buff_tmp[8] << 48 | (unsigned long long) buff_tmp[9] << 56;
+              fpr(stream,"0x%lx",data_tmp);
 
+              
+              return 10;
+          }
+          case 0:{
+              fpr(stream,"void,","");
+
+              
+              return 1;
+          }
+        default: {
+            for(int x=  0;x<39;x++) {
+                
+                if(*buffer == opcodes[x].opcode) {
+                    
+                  
+                    
+                    
+                    fpr(stream,"%s ",opcodes[x].name);
+                    print_gpr_fpr(info,buffer[1]);
+                    fpr(stream,"%s",",");
+
+                    print_gpr_fpr(info,buffer[2]);
+                    fpr(stream,"%s","\n");
+
+                    return 3;
+                }
+            }
+          
+            return 3;
+    }
+    
+    
+    
+    return 3;
 
 }
+}
 int
-p2rint_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
+pr2int_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
 {
   int length = 2;
   int status;
@@ -75,173 +132,8 @@ p2rint_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
   if ((status = info->read_memory_func (addr, buffer, 2, info)))
     goto fail;
 
-  if (info->endian == BFD_ENDIAN_BIG)
-    iword = bfd_getb16 (buffer);
-  else
-    iword = bfd_getl16 (buffer);
 
-  /* Form 1 instructions have the high bit set to 0.  */
-  if ((iword & (1<<15)) == 0)
-    {
-      /* Extract the Form 1 opcode.  */
-      opcode = &gaspard_form1_opc_info[iword >> 8];
-      switch (opcode->itype)
-	{
-	case gaspard_F1_NARG:
-	  fpr (stream, "%s", opcode->name);
-	  break;
-	case gaspard_F1_A:
-	  fpr (stream, "%s\t%s", opcode->name,
-	       reg_names[OP_A(iword)]);
-	  break;
-	case gaspard_F1_AB:
-	  fpr (stream, "%s\t%s, %s", opcode->name,
-	       reg_names[OP_A(iword)],
-	       reg_names[OP_B(iword)]);
-	  break;
-	case gaspard_F1_A4:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr + 2, buffer, 4, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb32 (buffer);
-	    else
-	      imm = bfd_getl32 (buffer);
-	    fpr (stream, "%s\t%s, 0x%x", opcode->name,
-		 reg_names[OP_A(iword)], imm);
-	    length = 6;
-	  }
-	  break;
-	case gaspard_F1_4:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr + 2, buffer, 4, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb32 (buffer);
-	    else
-	      imm = bfd_getl32 (buffer);
-	    fpr (stream, "%s\t0x%x", opcode->name, imm);
-	    length = 6;
-	  }
-	  break;
-	case gaspard_F1_M:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr + 2, buffer, 4, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb32 (buffer);
-	    else
-	      imm = bfd_getl32 (buffer);
-	    fpr (stream, "%s\t", opcode->name);
-	    info->print_address_func ((bfd_vma) imm, info);
-	    length = 6;
-	  }
-	  break;
-	case gaspard_F1_AiB:
-	  fpr (stream, "%s\t(%s), %s", opcode->name,
-	       reg_names[OP_A(iword)], reg_names[OP_B(iword)]);
-	  break;
-	case gaspard_F1_ABi:
-	  fpr (stream, "%s\t%s, (%s)", opcode->name,
-	       reg_names[OP_A(iword)], reg_names[OP_B(iword)]);
-	  break;
-	case gaspard_F1_4A:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr + 2, buffer, 4, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb32 (buffer);
-	    else
-	      imm = bfd_getl32 (buffer);
-	    fpr (stream, "%s\t0x%x, %s",
-		 opcode->name, imm, reg_names[OP_A(iword)]);
-	    length = 6;
-	  }
-	  break;
-	case gaspard_F1_AiB2:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr+2, buffer, 2, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb16 (buffer);
-	    else
-	      imm = bfd_getl16 (buffer);
-	    fpr (stream, "%s\t0x%x(%s), %s", opcode->name,
-		 imm,
-		 reg_names[OP_A(iword)],
-		 reg_names[OP_B(iword)]);
-	    length = 4;
-	  }
-	  break;
-	case gaspard_F1_ABi2:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr+2, buffer, 2, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb16 (buffer);
-	    else
-	      imm = bfd_getl16 (buffer);
-	    fpr (stream, "%s\t%s, 0x%x(%s)",
-		 opcode->name,
-		 reg_names[OP_A(iword)],
-		 imm,
-		 reg_names[OP_B(iword)]);
-	    length = 4;
-	  }
-	  break;
-        case gaspard_BAD:
-	  fpr (stream, "bad");
-	  break;
-	default:
-	  abort();
-	}
-    }
-  else if ((iword & (1<<14)) == 0)
-    {
-      /* Extract the Form 2 opcode.  */
-      opcode = &gaspard_form2_opc_info[(iword >> 12) & 3];
-      switch (opcode->itype)
-	{
-	case gaspard_F2_A8V:
-	  fpr (stream, "%s\t%s, 0x%x",
-	       opcode->name,
-	       reg_names[(iword >> 8) & 0xf],
-	       iword & ((1 << 8) - 1));
-	  break;
-	case gaspard_F2_NARG:
-	  fpr (stream, "%s", opcode->name);
-	  break;
-        case gaspard_BAD:
-	  fpr (stream, "bad");
-	  break;
-	default:
-	  abort();
-	}
-    }
-  else
-    {
-      /* Extract the Form 3 opcode.  */
-      opcode = &gaspard_form3_opc_info[(iword >> 10) & 15];
-      switch (opcode->itype)
-	{
-	case gaspard_F3_PCREL:
-	  fpr (stream, "%s\t", opcode->name);
-	  info->print_address_func (addr + INST2OFFSET (iword) + 2, info);
-	  break;
-        case gaspard_BAD:
-	  fpr (stream, "bad");
-	  break;
-	default:
-	  abort();
-	}
-    }
-
+    
   return length;
 
  fail:

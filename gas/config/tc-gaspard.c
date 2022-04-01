@@ -155,8 +155,17 @@ unsigned char gaspard_atol_8bits(char *str) {
     return atol(str);
     
 }
+void rm_spaces(char* s) {
+    char* d = s;
+    do {
+        while (*d == ' ') {
+            ++d;
+        }
+    } while (*s++ = *d++);
+}
+
 unsigned char gpr_fpr(char *argument) {
-	printf("argument %s \n",argument);
+    rm_spaces(argument);
 	if(strcmp(argument,"GPR0") == 0) {
 		//~ return 34;
 		return 0;
@@ -442,7 +451,7 @@ struct opcode_chiara tmp ;
                 unsigned char *gpr1 = build_argv(str);
                 str+= strlen(gpr1);
                 output[1] = gaspard_atol_8bits(gpr1) ;
-                md_number_to_chars (output, 0, 2);
+           //bfd_getl16     md_number_to_chars (output, 0, 2);
 
             } else if(op == 11) {
                 // not
@@ -452,7 +461,7 @@ struct opcode_chiara tmp ;
                 str+= strlen(gpr1);
                 unsigned char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
-                md_number_to_chars (output, 0, 2);
+             //   md_number_to_chars (output, 0, 2);
 
             } else if(op == 4) {
                 // inc
@@ -462,7 +471,7 @@ struct opcode_chiara tmp ;
                 str+= strlen(gpr1);
            unsigned      char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
-                md_number_to_chars (output, 0, 2);
+               // md_number_to_chars (output, 0, 2);
 
             } else if(op == 34) {
                 // dec
@@ -472,7 +481,7 @@ struct opcode_chiara tmp ;
                 str+= strlen(gpr1);
                unsigned char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
-                md_number_to_chars (output, 0, 2);
+               // md_number_to_chars (output, 0, 2);
 
             } else if(op == 35) {
                 // push
@@ -482,7 +491,7 @@ struct opcode_chiara tmp ;
                 str+= strlen(gpr1);
                unsigned char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
-                md_number_to_chars (output, 0, 2);
+               // md_number_to_chars (output, 0, 2);
 
             } else if(op == 33) {
                 // pop
@@ -492,7 +501,7 @@ struct opcode_chiara tmp ;
                 str+= strlen(gpr1);
                 unsigned char gpr1_final = gpr_fpr(gpr1);
                 output[1] = gpr1_final ;
-                md_number_to_chars (output, 0, 2);
+             //   md_number_to_chars (output, 0, 2);
 
             } else if(op == 150) {
                 // prcfg
@@ -518,12 +527,12 @@ struct opcode_chiara tmp ;
                 output[1] = gaspard_atol_8bits(mode);
                 unsigned long long number = gaspard_atol(adress);
 
-                output[2] = number << 8;
-                output[3] = number << 16;
-                output[4] = number << 24;
-                output[5] = number << 32;
-                output[6] = number << 40;
-                output[7] = number << 48;
+                output[2] = number ;
+                output[3] = number << 8;
+                output[4] = number << 16;
+                output[5] = number << 24;
+                output[6] = number << 32;
+                output[7] = number << 40;
                 output[8] = number << 48;
                 output[9] = number << 56;
                 
@@ -531,12 +540,12 @@ struct opcode_chiara tmp ;
                 // ret
                 output = frag_more(1);
                 output[0] = tmp.opcode;
-                md_number_to_chars (output, 0, 1);
+             //   md_number_to_chars (output, 0, 1);
             } else if(op == 0) {
                 // void
                 output = frag_more(1);
                 output[0] = tmp.opcode;
-                md_number_to_chars (output, 0, 1);
+              //  md_number_to_chars (output, 0, 1);
 
             } else if(op == 18) {
                 // calle
@@ -552,9 +561,9 @@ struct opcode_chiara tmp ;
                 output[4] = number << 32;
                 output[5] = number << 40;
                 output[6] = number << 48;
-                output[7] = number << 48;
-                output[8] = number << 56;
-                md_number_to_chars (output, 0, 9);
+                output[7] = number << 56;
+                output[8] = number << 64;
+               // md_number_to_chars (output, 0, 9);
 
                 
             }  else if(op == 19) {
@@ -571,9 +580,9 @@ struct opcode_chiara tmp ;
                 output[4] = number << 32;
                 output[5] = number << 40;
                 output[6] = number << 48;
-                output[7] = number << 48;
-                output[8] = number << 56;
-                md_number_to_chars (output, 0, 9);
+                output[7] = number << 56;
+                output[8] = number << 64;
+             //   md_number_to_chars (output, 0, 9);
 
             }  else if(op == 20) {
                 // callc
@@ -589,9 +598,9 @@ struct opcode_chiara tmp ;
                 output[4] = number << 32;
                 output[5] = number << 40;
                 output[6] = number << 48;
-                output[7] = number << 48;
-                output[8] = number << 56;
-                md_number_to_chars (output, 0, 9);
+                output[7] = number << 56;
+                output[8] = number << 64;
+              //  md_number_to_chars (output, 0, 9);
 
             }  else if(op == 21) {
                 // callo
@@ -607,9 +616,9 @@ struct opcode_chiara tmp ;
                 output[4] = number << 32;
                 output[5] = number << 40;
                 output[6] = number << 48;
-                output[7] = number << 48;
-                output[8] = number << 56;
-                md_number_to_chars (output, 0, 9);
+                output[7] = number << 56;
+                output[8] = number << 64;
+              //  md_number_to_chars (output, 0, 9);
 
             }  else if(op == 22) {
                 // callrz
@@ -625,9 +634,9 @@ struct opcode_chiara tmp ;
                 output[4] = number << 32;
                 output[5] = number << 40;
                 output[6] = number << 48;
-                output[7] = number << 48;
-                output[8] = number << 56;
-                md_number_to_chars (output, 0, 9);
+                output[7] = number << 56;
+                output[8] = number << 64;
+                //md_number_to_chars (output, 0, 9);
 
             }  else if(op == 23) {
                 // callrc
@@ -643,9 +652,9 @@ struct opcode_chiara tmp ;
                 output[4] = number << 32;
                 output[5] = number << 40;
                 output[6] = number << 48;
-                output[7] = number << 48;
-                output[8] = number << 56;
-                md_number_to_chars (output, 0, 9);
+                output[7] = number << 56;
+                output[8] = number << 64;
+               // md_number_to_chars (output, 0, 9);
 
             }  else if(op == 24) {
                 // callro
@@ -661,9 +670,9 @@ struct opcode_chiara tmp ;
                 output[5] = number << 32;
                 output[6] = number << 40;
                 output[7] = number << 48;
-                output[8] = number << 48;
-                output[9] = number << 56;
-                md_number_to_chars (output, 0, 9);
+                output[8] = number << 56;
+                output[9] = number << 64;
+               // md_number_to_chars (output, 0, 9);
 
             }  else if(op == 112) {
                 // dispab
@@ -687,10 +696,10 @@ struct opcode_chiara tmp ;
                 output[5] = adresse << 32;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
-                output[8] = adresse << 48;
-                output[9] = adresse << 56;
+                output[8] = adresse << 56;
+                output[9] = adresse << 64;
                 output[10] = gaspard_atol_8bits(argv2) ;
-                md_number_to_chars (output, 0, 10);
+             //   md_number_to_chars (output, 0, 10);
 
    
             }  else if(op == 111) {
@@ -715,10 +724,10 @@ struct opcode_chiara tmp ;
                 output[5] = adresse << 32;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
-                output[8] = adresse << 48;
-                output[9] = adresse << 56;
+                output[8] = adresse << 56;
+                output[9] = adresse << 64;
                 output[10] = gpr_fpr(argv2) ;
-                md_number_to_chars (output, 0, 10);
+            //    md_number_to_chars (output, 0, 10);
 
    
             }  else if(op == 40) {
@@ -745,12 +754,12 @@ struct opcode_chiara tmp ;
                 output[5] = adresse << 32;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
-                output[8] = adresse << 48;
-                output[9] = adresse << 56;
+                output[8] = adresse << 56;
+                output[9] = adresse << 64;
                 output[10] = data ;
                 output[11] = data << 8 ;
 
-                md_number_to_chars (output, 0, 11);
+              //  md_number_to_chars (output, 0, 11);
 
             }  else if(op == 41) {
                 // dispas_read
@@ -774,10 +783,10 @@ struct opcode_chiara tmp ;
                 output[5] = adresse << 32;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
-                output[8] = adresse << 48;
-                output[9] = adresse << 56;
+                output[8] = adresse << 56;
+                output[9] = adresse << 64;
                 output[10] = gpr_fpr(argv2) ;
-                md_number_to_chars (output, 0, 10);
+                //md_number_to_chars (output, 0, 10);
 
             }  else if(op == 45) {
                 // dispal_write
@@ -803,8 +812,8 @@ struct opcode_chiara tmp ;
                 output[5] = adresse << 32;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
-                output[8] = adresse << 48;
-                output[9] = adresse << 56;
+                output[8] = adresse << 56;
+                output[9] = adresse << 64;
                 output[10] = data ;
                 output[11] = data << 8 ;
                 output[12] = data << 16 ;
@@ -833,10 +842,10 @@ struct opcode_chiara tmp ;
                 output[5] = adresse << 32;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
-                output[8] = adresse << 48;
-                output[9] = adresse << 56;
+                output[8] = adresse << 56;
+                output[9] = adresse << 64;
                 output[10] = gpr_fpr(argv2) ;
-                md_number_to_chars (output, 0, 10);
+             //   md_number_to_chars (output, 0, 10);
             }
             
             
@@ -864,7 +873,7 @@ struct opcode_chiara tmp ;
                     output[0] = tmp.opcode;
                     output[1]  = gpr1_final;
                     output[2] = gpr2_final;
-                    md_number_to_chars (output, 0, 3);
+                   // md_number_to_chars (output, 0, 3);
                     
                 } else if(gpr2_final == 254) {
                     printf("gpr disp avec immediat \n");
@@ -880,19 +889,18 @@ struct opcode_chiara tmp ;
                     output[7] = data << 32;
                     output[8] = data << 40;
                     output[9] = data << 48;
-                    output[10] = data << 48;
-                    output[11] = data << 56;
-                    md_number_to_chars (output, 0, 3+8);
+                    output[10] = data << 56;
+                    output[11] = data << 64;
+                 //   md_number_to_chars (output, 0, 3+8);
  
                 }
                 else {
-                    printf("GPR0 et gpR0 \n");
                 output = frag_more(3);
                 output[0] = tmp.opcode;
                 // controler si cela n'est pas un immediat
                 output[1]  = gpr1_final;
                 output[2] = gpr2_final;
-                md_number_to_chars (output, 0, 3);
+                    printf("GPR num %d %d  ",gpr1_final,gpr2_final);
                 }
             }
           break; 
