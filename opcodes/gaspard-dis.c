@@ -64,7 +64,7 @@ int length = 2;
     bfd_byte buffer[4];
   fpr = info->fprintf_func;
 
-    if ((status = info->read_memory_func (addr, buffer, 3, info))) {
+    if ((status = info->read_memory_func (addr, buffer, 1, info))) {
         info->memory_error_func (status, addr, info);
         return 1;
     }
@@ -72,6 +72,7 @@ int length = 2;
           case 36: {
               // syscall
               
+              fpr(stream,"syscall %x",buffer[1]);
               
               return 2;
           }
@@ -79,26 +80,55 @@ int length = 2;
               
               // not
               
+              fpr(stream,"not");
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              print_gpr_fpr(info,buffer[1]);
+
               return 2;
           }
           case 4: {
               // inc
-              
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              fpr(stream,"inc ","");
+              print_gpr_fpr(info,buffer[1]);
+
               return 2;
           }
           case 34: {
               // dec
-              
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              fpr(stream,"dec ","");
+              print_gpr_fpr(info,buffer[1]);
+
               return 2;
           }
           case 35: {
               // push
-              
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              fpr(stream,"push ","");
+              print_gpr_fpr(info,buffer[1]);
               return 2;
           }
           case 33: {
               // pop
-              
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              fpr(stream,"pop ","");
+              print_gpr_fpr(info,buffer[1]);
               return 2;
           }
           case 150: {
@@ -118,6 +148,7 @@ int length = 2;
           }
           case 32: {
               // ret
+              fpr(info,"ret","");
               return 1;
           }
           case 0:{
@@ -127,53 +158,207 @@ int length = 2;
               return 1;
           }
           case 18: {
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
               
               // calle
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"calle 0x%lx",data_tmp);
+              
+              
               
               return 9;
           }
           case 19: {
               
               // callz
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callz 0x%lx",data_tmp);
+              
               
               return 9;
           }
           case 20: {
               
               // callc
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callc 0x%lx",data_tmp);
               
               return 9;
           }
           case 21: {
               
               // callo
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
               
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callo 0x%lx",data_tmp);
               return 9;
           }
           case 22: {
               
               // callrz
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
               
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callrz 0x%lx",data_tmp);
               return 9;
           }
           case 23: {
               
               // callrc
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
               
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callrc 0x%lx",data_tmp);
               return 9;
           }
           case 24: {
               
               // callro
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
               
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callro 0x%lx",data_tmp);
               return 9;
           }
+          case 112: {
+              
+              // dispab
+              
+              
+              bfd_byte buff_tmp[10];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispab_write 0x%lx,%x",data_tmp,buff_tmp[9]);
+              
+              
+              return 10;
+              
+          }
+          case 111: {
+              // dispab_read
+              
+              
+              
+              bfd_byte buff_tmp[10];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispab_read 0x%lx,",data_tmp);
+              printf("dispab test %d \n",buffer[9]);
+              print_gpr_fpr(info,buffer[9]);
+
+              return 10;
+          }
+          case 40: {
+              // dispas_write
+              
+              bfd_byte buff_tmp[11];
+              if ((status = info->read_memory_func (addr, buff_tmp, 11, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispas_write 0x%lx,%x",data_tmp,buff_tmp[9] | buff_tmp[10] << 8 );
+              
+              return 11;
+              
+          }
+          case 41: {
+              // dispas_read
+              
+              bfd_byte buff_tmp[11];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispas_read 0x%lx,",data_tmp );
+              print_gpr_fpr(info,buffer[9]);
+              return 10;
+              
+          }
+          case 45  : {
+              // dispal_write
+              
+              bfd_byte buff_tmp[13];
+              if ((status = info->read_memory_func (addr, buff_tmp, 11, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispal_read 0x%lx,%lx",data_tmp,buff_tmp[9] | buff_tmp[10] << 8 |   buff_tmp[10] << 16 |  buff_tmp[10] << 24);
+              
+              return 13;
+          }
+          case 47: {
+              
+              // dispal_read
+              bfd_byte buff_tmp[13];
+              if ((status = info->read_memory_func (addr, buff_tmp, 11, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              
+              fpr(stream,"dispal_read 0x%lx,",data_tmp);
+              print_gpr_fpr(info,buffer[9]);
+
+              return 13;
+          }
+              
         default: {
             for(int x=  0;x<39;x++) {
                 
                 if(*buffer == opcodes[x].opcode) {
                     
-                  
+                    if ((status = info->read_memory_func (addr, buffer, 3, info))) {
+                        info->memory_error_func (status, addr, info);
+                        return -1;
+                    }
                     
                     
                     fpr(stream,"%s ",opcodes[x].name);

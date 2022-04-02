@@ -254,12 +254,12 @@ struct opcode_chiara opcodes [] = {
   {"callrz",22,1,callrz},
   {"callrc",23,1,callrc},
   {"callro",24,1,callro},
-  {"dispab",112,1,dispab},
-  {"dispab",111,1,dispab_read},
-  {"dispas",40,1,dispas_write},
-  {"dispas",41,1,dispas_read},
-  {"dispal",45,1,dispal_write},
-  {"dispal",47,1,dispal_read},
+  {"dispab_write",112,1,dispab},
+  {"dispab_read",111,1,dispab_read},
+  {"dispas_write",40,1,dispas_write},
+  {"dispas_read",41,1,dispas_read},
+  {"dispal_write",45,1,dispal_write},
+  {"dispal_read",47,1,dispal_read},
 
 };
 
