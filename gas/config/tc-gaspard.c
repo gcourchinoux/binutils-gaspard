@@ -422,7 +422,7 @@ while(*str != '\0') {
 
             bool ok =false;
 struct opcode_chiara tmp ;
-      for(int x =0;x<39;x++) {
+      for(int x =0;x<40;x++) {
 
 // parcourir les instructions 
 
@@ -901,7 +901,7 @@ struct opcode_chiara tmp ;
 
         } else {
             // imprimer que nous troubons pas l'instruction 
-     as_fatal (_("Cannot find instruction ")); 
+     as_fatal (_("Cannot find instruction %s "),instr);
 
 
 

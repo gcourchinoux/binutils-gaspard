@@ -284,8 +284,8 @@ int length = 2;
               
               unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
               fpr(stream,"dispab_read 0x%lx,",data_tmp);
-              printf("dispab test %d \n",buffer[9]);
-              print_gpr_fpr(info,buffer[9]);
+           //   printf("dispab test %d \n",buffer[9]);
+              print_gpr_fpr(info,buff_tmp[9]);
 
               return 10;
           }
@@ -315,7 +315,7 @@ int length = 2;
               
               unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
               fpr(stream,"dispas_read 0x%lx,",data_tmp );
-              print_gpr_fpr(info,buffer[9]);
+              print_gpr_fpr(info,buff_tmp[9]);
               return 10;
               
           }
@@ -337,7 +337,7 @@ int length = 2;
               
               // dispal_read
               bfd_byte buff_tmp[13];
-              if ((status = info->read_memory_func (addr, buff_tmp, 11, info))) {
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
                   info->memory_error_func (status, addr, info);
                   return -1;
               }
@@ -345,9 +345,9 @@ int length = 2;
               unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
               
               fpr(stream,"dispal_read 0x%lx,",data_tmp);
-              print_gpr_fpr(info,buffer[9]);
+              print_gpr_fpr(info,buff_tmp[9]);
 
-              return 13;
+              return 10;
           }
               
         default: {
