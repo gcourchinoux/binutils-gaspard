@@ -562,7 +562,6 @@ struct opcode_chiara tmp ;
                 output[6] = number << 40;
                 output[7] = number << 48;
                 output[8] = number << 56;
-                output[9] = number << 64;
                // md_number_to_chars (output, 0, 9);
 
                 
@@ -581,7 +580,6 @@ struct opcode_chiara tmp ;
                 output[6] = number << 40;
                 output[7] = number << 48;
                 output[8] = number << 56;
-                output[9] = number << 64;
              //   md_number_to_chars (output, 0, 9);
 
             }  else if(op == 20) {
@@ -599,7 +597,6 @@ struct opcode_chiara tmp ;
                 output[6] = number << 40;
                 output[7] = number << 48;
                 output[8] = number << 56;
-                output[9] = number << 64;
               //  md_number_to_chars (output, 0, 9);
 
             }  else if(op == 21) {
@@ -617,7 +614,6 @@ struct opcode_chiara tmp ;
                 output[6] = number << 40;
                 output[7] = number << 48;
                 output[8] = number << 56;
-                output[9] = number << 64;
               //  md_number_to_chars (output, 0, 9);
 
             }  else if(op == 22) {
@@ -635,7 +631,6 @@ struct opcode_chiara tmp ;
                 output[6] = number << 40;
                 output[7] = number << 48;
                 output[8] = number << 56;
-                output[9] = number << 64;
                 //md_number_to_chars (output, 0, 9);
 
             }  else if(op == 23) {
@@ -653,7 +648,6 @@ struct opcode_chiara tmp ;
                 output[6] = number << 40;
                 output[7] = number << 48;
                 output[8] = number << 56;
-                output[9] = number << 64;
                // md_number_to_chars (output, 0, 9);
 
             }  else if(op == 24) {
@@ -671,7 +665,6 @@ struct opcode_chiara tmp ;
                 output[6] = number << 40;
                 output[7] = number << 48;
                 output[8] = number << 56;
-                output[9] = number << 64;
                // md_number_to_chars (output, 0, 9);
 
             }  else if(op == 112) {
@@ -697,8 +690,9 @@ struct opcode_chiara tmp ;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
                 output[8] = adresse << 56;
-                output[9] = adresse << 64;
-                output[10] = gaspard_atol_8bits(argv2) ;
+
+                output[9] = gaspard_atol_8bits(argv2) ;
+                printf("%d dipab write \n ",output[10] );
              //   md_number_to_chars (output, 0, 10);
 
    
@@ -725,8 +719,7 @@ struct opcode_chiara tmp ;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
                 output[8] = adresse << 56;
-                output[9] = adresse << 64;
-                output[10] = (unsigned char)gpr_fpr(argv2) ;
+                output[9] = (unsigned char)gpr_fpr(argv2) ;
                 printf("argv dispab %s %d",argv2,gpr_fpr(argv2) );
 
             //    md_number_to_chars (output, 0, 10);
@@ -757,9 +750,8 @@ struct opcode_chiara tmp ;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
                 output[8] = adresse << 56;
-                output[9] = adresse << 64;
-                output[10] = data ;
-                output[11] = data << 8 ;
+                output[9] = data ;
+                output[10] = data << 8 ;
 
               //  md_number_to_chars (output, 0, 11);
 
@@ -786,8 +778,7 @@ struct opcode_chiara tmp ;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
                 output[8] = adresse << 56;
-                output[9] = adresse << 64;
-                output[10] = gpr_fpr(argv2) ;
+                output[9] = gpr_fpr(argv2) ;
                 //md_number_to_chars (output, 0, 10);
 
             }  else if(op == 45) {
@@ -815,11 +806,10 @@ struct opcode_chiara tmp ;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
                 output[8] = adresse << 56;
-                output[9] = adresse << 64;
-                output[10] = data ;
-                output[11] = data << 8 ;
-                output[12] = data << 16 ;
-                output[13] = data << 24 ;
+                output[9] = data ;
+                output[10] = data << 8 ;
+                output[11] = data << 16 ;
+                output[12] = data << 24 ;
 
                 md_number_to_chars (output, 0, 13);
             }  else if(op == 47) {
@@ -846,8 +836,7 @@ struct opcode_chiara tmp ;
                 output[6] = adresse << 40;
                 output[7] = adresse << 48;
                 output[8] = adresse << 56;
-                output[9] = adresse << 64;
-                output[10] = gpr_fpr(argv2) ;
+                output[9] = gpr_fpr(argv2) ;
 
                 
                 //   md_number_to_chars (output, 0, 10);
@@ -895,7 +884,6 @@ struct opcode_chiara tmp ;
                     output[8] = data << 40;
                     output[9] = data << 48;
                     output[10] = data << 56;
-                    output[11] = data << 64;
                  //   md_number_to_chars (output, 0, 3+8);
  
                 }
