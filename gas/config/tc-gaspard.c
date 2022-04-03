@@ -811,7 +811,7 @@ struct opcode_chiara tmp ;
                 output[11] = data << 16 ;
                 output[12] = data << 24 ;
 
-                md_number_to_chars (output, 0, 13);
+              //  md_number_to_chars (output, 0, 13);
             }  else if(op == 47) {
                 // dispal_read
                 output = frag_more(10);
