@@ -893,7 +893,7 @@ struct opcode_chiara tmp ;
                 // controler si cela n'est pas un immediat
                 output[1]  = gpr1_final;
                 output[2] = gpr2_final;
-                    printf("GPR num %d %d  ",gpr1_final,gpr2_final);
+                   // printf("GPR num %d %d  ",gpr1_final,gpr2_final);
                 }
             }
           break; 

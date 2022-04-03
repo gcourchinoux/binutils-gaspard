@@ -342,8 +342,9 @@ int length = 2;
                   return -1;
               }
               
-              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long)buff_tmp[8] << 56;
               
+
               fpr(stream,"dispal_read 0x%lx,",data_tmp);
               print_gpr_fpr(info,buff_tmp[9]);
 
@@ -381,26 +382,4 @@ int length = 2;
     return -1;
 
 }
-}
-int
-pr2int_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
-{
-  int length = 2;
-  int status;
-  stream = info->stream;
-  const gaspard_opc_info_t * opcode;
-  bfd_byte buffer[4];
-  unsigned short iword;
-  fpr = info->fprintf_func;
-
-  if ((status = info->read_memory_func (addr, buffer, 2, info)))
-    goto fail;
-
-
-    
-  return length;
-
- fail:
-  info->memory_error_func (status, addr, info);
-  return -1;
 }
