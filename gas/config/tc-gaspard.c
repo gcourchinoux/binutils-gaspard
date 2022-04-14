@@ -147,6 +147,10 @@ parse_register_operand (char **ptr)
 }
 //todo : faire les hexas et les binaires
 unsigned long long gaspard_atol(char* str){
+	
+	// prendre en charge les hexas 
+	
+	
     return atol(str);
 }
 unsigned char gaspard_atol_8bits(char *str) {
