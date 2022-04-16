@@ -355,19 +355,18 @@ int length = 2;
 			   
 			   // disp
 			     bfd_byte buff_tmp[13];
-             if ((status = info->read_memory_func (addr, buffer, 3, info))) {
+             if ((status = info->read_memory_func (addr, buff_tmp, 3, info))) {
                         info->memory_error_func (status, addr, info);
                         return -1;
                     }
-              unsigned char gpr1 = buff_tmp[0]; 
+              unsigned char gpr1 = buff_tmp[1]; 
               
-              unsigned char sixtysix = buff_tmp[1];
-              printf("ssixtysix %d \n",sixtysix);
+              unsigned char sixtysix = buff_tmp[2];
            
               
               if(sixtysix == 0x42) {
 				  
-				   if ((status = info->read_memory_func (addr, buffer, 11, info))) {
+				   if ((status = info->read_memory_func (addr, buff_tmp, 11, info))) {
                         info->memory_error_func (status, addr, info);
                         return -1;
                     }
