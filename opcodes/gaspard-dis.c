@@ -350,7 +350,53 @@ int length = 2;
 
               return 10;
           }
-           // TODO disp   
+           // TODO disp
+           case 0x2c: {
+			   
+			   // disp
+			     bfd_byte buff_tmp[13];
+             if ((status = info->read_memory_func (addr, buffer, 3, info))) {
+                        info->memory_error_func (status, addr, info);
+                        return -1;
+                    }
+              unsigned char gpr1 = buff_tmp[0]; 
+              
+              unsigned char sixtysix = buff_tmp[1];
+              printf("ssixtysix %d \n",sixtysix);
+           
+              
+              if(sixtysix == 0x42) {
+				  
+				   if ((status = info->read_memory_func (addr, buffer, 11, info))) {
+                        info->memory_error_func (status, addr, info);
+                        return -1;
+                    }
+			unsigned long long data_tmp = (unsigned long long)buff_tmp[3] |  (unsigned long long) buff_tmp[4] << 8 | (unsigned long long)  buff_tmp[5] << 16 |  (unsigned long long) buff_tmp[6] << 24 | (unsigned long long) buff_tmp[7] << 32 | (unsigned long long) buff_tmp[8] << 40 | (unsigned long long) buff_tmp[9] << 48 | (unsigned long long)buff_tmp[10] << 56;
+  
+				       fpr(stream,"%s","disp ");
+                     print_gpr_fpr(info,gpr1);
+                   fpr(stream,", 0x%x \n",data_tmp);
+
+				  
+				  
+				  
+				  return 11;
+				  } else {
+			unsigned char gpr2 = sixtysix;
+               fpr(stream,"disp ",0);
+                    print_gpr_fpr(info,gpr1);
+                   fpr(stream,",",0);
+
+                    print_gpr_fpr(info,gpr2);
+                    fpr(stream,"%s","\n");
+
+					  
+					  }
+			   
+			   
+			   return 3; 
+			   
+			   }   
         default: {
             for(int x=  0;x<39;x++) {
                 
