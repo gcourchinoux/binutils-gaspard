@@ -42,190 +42,389 @@ static const char * reg_names[16] =
 
 extern const struct opcode_chiara opcodes [];
 
+void print_gpr_fpr(struct disassemble_info *info,bfd_byte  gpr_gpr) {
+
+    if(gpr_gpr > 31) {
+        fpr(stream,"FPR%d",gpr_gpr+31);
+        
+    } else {
+        fpr(stream,"GPR%d",gpr_gpr);
+
+    }
+    
+    
+}
 int
 print_insn_gaspard (bfd_vma addr, struct disassemble_info * info)
 {
-  int length = 2;
-  int status;
-  stream = info->stream;
-  const gaspard_opc_info_t * opcode;
-  bfd_byte buffer[4];
-  unsigned short iword;
+
+int length = 2;
+    int status;
+    stream = info->stream;
+    bfd_byte buffer[4];
   fpr = info->fprintf_func;
 
-  if ((status = info->read_memory_func (addr, buffer, 2, info)))
-    goto fail;
-
-  if (info->endian == BFD_ENDIAN_BIG)
-    iword = bfd_getb16 (buffer);
-  else
-    iword = bfd_getl16 (buffer);
-
-  /* Form 1 instructions have the high bit set to 0.  */
-  if ((iword & (1<<15)) == 0)
-    {
-      /* Extract the Form 1 opcode.  */
-      opcode = &gaspard_form1_opc_info[iword >> 8];
-      switch (opcode->itype)
-	{
-	case gaspard_F1_NARG:
-	  fpr (stream, "%s", opcode->name);
-	  break;
-	case gaspard_F1_A:
-	  fpr (stream, "%s\t%s", opcode->name,
-	       reg_names[OP_A(iword)]);
-	  break;
-	case gaspard_F1_AB:
-	  fpr (stream, "%s\t%s, %s", opcode->name,
-	       reg_names[OP_A(iword)],
-	       reg_names[OP_B(iword)]);
-	  break;
-	case gaspard_F1_A4:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr + 2, buffer, 4, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb32 (buffer);
-	    else
-	      imm = bfd_getl32 (buffer);
-	    fpr (stream, "%s\t%s, 0x%x", opcode->name,
-		 reg_names[OP_A(iword)], imm);
-	    length = 6;
-	  }
-	  break;
-	case gaspard_F1_4:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr + 2, buffer, 4, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb32 (buffer);
-	    else
-	      imm = bfd_getl32 (buffer);
-	    fpr (stream, "%s\t0x%x", opcode->name, imm);
-	    length = 6;
-	  }
-	  break;
-	case gaspard_F1_M:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr + 2, buffer, 4, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb32 (buffer);
-	    else
-	      imm = bfd_getl32 (buffer);
-	    fpr (stream, "%s\t", opcode->name);
-	    info->print_address_func ((bfd_vma) imm, info);
-	    length = 6;
-	  }
-	  break;
-	case gaspard_F1_AiB:
-	  fpr (stream, "%s\t(%s), %s", opcode->name,
-	       reg_names[OP_A(iword)], reg_names[OP_B(iword)]);
-	  break;
-	case gaspard_F1_ABi:
-	  fpr (stream, "%s\t%s, (%s)", opcode->name,
-	       reg_names[OP_A(iword)], reg_names[OP_B(iword)]);
-	  break;
-	case gaspard_F1_4A:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr + 2, buffer, 4, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb32 (buffer);
-	    else
-	      imm = bfd_getl32 (buffer);
-	    fpr (stream, "%s\t0x%x, %s",
-		 opcode->name, imm, reg_names[OP_A(iword)]);
-	    length = 6;
-	  }
-	  break;
-	case gaspard_F1_AiB2:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr+2, buffer, 2, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb16 (buffer);
-	    else
-	      imm = bfd_getl16 (buffer);
-	    fpr (stream, "%s\t0x%x(%s), %s", opcode->name,
-		 imm,
-		 reg_names[OP_A(iword)],
-		 reg_names[OP_B(iword)]);
-	    length = 4;
-	  }
-	  break;
-	case gaspard_F1_ABi2:
-	  {
-	    unsigned imm;
-	    if ((status = info->read_memory_func (addr+2, buffer, 2, info)))
-	      goto fail;
-	    if (info->endian == BFD_ENDIAN_BIG)
-	      imm = bfd_getb16 (buffer);
-	    else
-	      imm = bfd_getl16 (buffer);
-	    fpr (stream, "%s\t%s, 0x%x(%s)",
-		 opcode->name,
-		 reg_names[OP_A(iword)],
-		 imm,
-		 reg_names[OP_B(iword)]);
-	    length = 4;
-	  }
-	  break;
-        case gaspard_BAD:
-	  fpr (stream, "bad");
-	  break;
-	default:
-	  abort();
-	}
+    if ((status = info->read_memory_func (addr, buffer, 1, info))) {
+        info->memory_error_func (status, addr, info);
+        return 1;
     }
-  else if ((iword & (1<<14)) == 0)
-    {
-      /* Extract the Form 2 opcode.  */
-      opcode = &gaspard_form2_opc_info[(iword >> 12) & 3];
-      switch (opcode->itype)
-	{
-	case gaspard_F2_A8V:
-	  fpr (stream, "%s\t%s, 0x%x",
-	       opcode->name,
-	       reg_names[(iword >> 8) & 0xf],
-	       iword & ((1 << 8) - 1));
-	  break;
-	case gaspard_F2_NARG:
-	  fpr (stream, "%s", opcode->name);
-	  break;
-        case gaspard_BAD:
-	  fpr (stream, "bad");
-	  break;
-	default:
-	  abort();
-	}
-    }
-  else
-    {
-      /* Extract the Form 3 opcode.  */
-      opcode = &gaspard_form3_opc_info[(iword >> 10) & 15];
-      switch (opcode->itype)
-	{
-	case gaspard_F3_PCREL:
-	  fpr (stream, "%s\t", opcode->name);
-	  info->print_address_func (addr + INST2OFFSET (iword) + 2, info);
-	  break;
-        case gaspard_BAD:
-	  fpr (stream, "bad");
-	  break;
-	default:
-	  abort();
-	}
-    }
+      switch(buffer[0]) {
+          case 36: {
+              // syscall
+              
+              fpr(stream,"syscall %x",buffer[1]);
+              
+              return 2;
+          }
+          case 11: {
+              
+              // not
+              
+              fpr(stream,"not");
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              print_gpr_fpr(info,buffer[1]);
 
-  return length;
+              return 2;
+          }
+          case 4: {
+              // inc
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              fpr(stream,"inc ","");
+              print_gpr_fpr(info,buffer[1]);
 
- fail:
-  info->memory_error_func (status, addr, info);
-  return -1;
+              return 2;
+          }
+          case 34: {
+              // dec
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              fpr(stream,"dec ","");
+              print_gpr_fpr(info,buffer[1]);
+
+              return 2;
+          }
+          case 35: {
+              // push
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              fpr(stream,"push ","");
+              print_gpr_fpr(info,buffer[1]);
+              return 2;
+          }
+          case 33: {
+              // pop
+              if ((status = info->read_memory_func (addr, buffer, 2, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return 1;
+              }
+              fpr(stream,"pop ","");
+              print_gpr_fpr(info,buffer[1]);
+              return 2;
+          }
+          case 150: {
+              // prcfg
+              bfd_byte buff_tmp[10];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              fpr(stream,"prcfg %d,",buff_tmp[1]);
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[2] |  (unsigned long long) buff_tmp[3] << 8 | (unsigned long long)  buff_tmp[4] << 16 |  (unsigned long long) buff_tmp[5] << 24 | (unsigned long long) buff_tmp[6] << 32 | (unsigned long long) buff_tmp[7] << 40 | (unsigned long long) buff_tmp[8] << 48 | (unsigned long long) buff_tmp[9] << 56;
+              fpr(stream,"0x%lx",data_tmp);
+
+              
+              return 10;
+          }
+          case 32: {
+              // ret
+              fpr(info,"ret","");
+              return 1;
+          }
+          case 0:{
+              fpr(stream,"void","");
+
+              
+              return 1;
+          }
+          case 18: {
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              // calle
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"calle 0x%lx",data_tmp);
+              
+              
+              
+              return 9;
+          }
+          case 19: {
+              
+              // callz
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callz 0x%lx",data_tmp);
+              
+              
+              return 9;
+          }
+          case 20: {
+              
+              // callc
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callc 0x%lx",data_tmp);
+              
+              return 9;
+          }
+          case 21: {
+              
+              // callo
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callo 0x%lx",data_tmp);
+              return 9;
+          }
+          case 22: {
+              
+              // callrz
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callrz 0x%lx",data_tmp);
+              return 9;
+          }
+          case 23: {
+              
+              // callrc
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callrc 0x%lx",data_tmp);
+              return 9;
+          }
+          case 24: {
+              
+              // callro
+              bfd_byte buff_tmp[9];
+              if ((status = info->read_memory_func (addr, buff_tmp, 9, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"callro 0x%lx",data_tmp);
+              return 9;
+          }
+          case 112: {
+              
+              // dispab
+              
+              
+              bfd_byte buff_tmp[10];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispab_write 0x%lx,%x",data_tmp,buff_tmp[9]);
+              
+              
+              return 10;
+              
+          }
+          case 111: {
+              // dispab_read
+              
+              
+              
+              bfd_byte buff_tmp[10];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispab_read 0x%lx,",data_tmp);
+           //   printf("dispab test %d \n",buffer[9]);
+              print_gpr_fpr(info,buff_tmp[9]);
+
+              return 10;
+          }
+          case 40: {
+              // dispas_write
+              
+              bfd_byte buff_tmp[11];
+              if ((status = info->read_memory_func (addr, buff_tmp, 11, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispas_write 0x%lx,%x",data_tmp,buff_tmp[9] | buff_tmp[10] << 8 );
+              
+              return 11;
+              
+          }
+          case 41: {
+              // dispas_read
+              
+              bfd_byte buff_tmp[11];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispas_read 0x%lx,",data_tmp );
+              print_gpr_fpr(info,buff_tmp[9]);
+              return 10;
+              
+          }
+          case 45  : {
+              // dispal_write
+              
+              bfd_byte buff_tmp[13];
+              if ((status = info->read_memory_func (addr, buff_tmp, 13, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long) buff_tmp[8] << 56;
+              fpr(stream,"dispal_write 0x%lx,%lx",data_tmp,buff_tmp[9] | buff_tmp[10] << 8 |   buff_tmp[11] << 16 |  buff_tmp[12] << 24);
+              
+              return 13;
+          }
+          case 47: {
+              
+              // dispal_read
+              bfd_byte buff_tmp[13];
+              if ((status = info->read_memory_func (addr, buff_tmp, 10, info))) {
+                  info->memory_error_func (status, addr, info);
+                  return -1;
+              }
+              
+              unsigned long long data_tmp = (unsigned long long)buff_tmp[1] |  (unsigned long long) buff_tmp[2] << 8 | (unsigned long long)  buff_tmp[3] << 16 |  (unsigned long long) buff_tmp[4] << 24 | (unsigned long long) buff_tmp[5] << 32 | (unsigned long long) buff_tmp[6] << 40 | (unsigned long long) buff_tmp[7] << 48 | (unsigned long long)buff_tmp[8] << 56;
+              
+
+              fpr(stream,"dispal_read 0x%lx,",data_tmp);
+              print_gpr_fpr(info,buff_tmp[9]);
+
+              return 10;
+          }
+           // TODO disp
+           case 0x2c: {
+			   
+			   // disp
+			     bfd_byte buff_tmp[13];
+             if ((status = info->read_memory_func (addr, buff_tmp, 3, info))) {
+                        info->memory_error_func (status, addr, info);
+                        return -1;
+                    }
+              unsigned char gpr1 = buff_tmp[1]; 
+              
+              unsigned char sixtysix = buff_tmp[2];
+           
+              
+              if(sixtysix == 0x42) {
+				  
+				   if ((status = info->read_memory_func (addr, buff_tmp, 11, info))) {
+                        info->memory_error_func (status, addr, info);
+                        return -1;
+                    }
+			unsigned long long data_tmp = (unsigned long long)buff_tmp[3] |  (unsigned long long) buff_tmp[4] << 8 | (unsigned long long)  buff_tmp[5] << 16 |  (unsigned long long) buff_tmp[6] << 24 | (unsigned long long) buff_tmp[7] << 32 | (unsigned long long) buff_tmp[8] << 40 | (unsigned long long) buff_tmp[9] << 48 | (unsigned long long)buff_tmp[10] << 56;
+  
+				       fpr(stream,"%s","disp ");
+                     print_gpr_fpr(info,gpr1);
+                   fpr(stream,", 0x%x \n",data_tmp);
+
+				  
+				  
+				  
+				  return 11;
+				  } else {
+			unsigned char gpr2 = sixtysix;
+               fpr(stream,"disp ",0);
+                    print_gpr_fpr(info,gpr1);
+                   fpr(stream,",",0);
+
+                    print_gpr_fpr(info,gpr2);
+                    fpr(stream,"%s","\n");
+
+					  
+					  }
+			   
+			   
+			   return 3; 
+			   
+			   }   
+        default: {
+            for(int x=  0;x<39;x++) {
+                
+                if(*buffer == opcodes[x].opcode) {
+                    
+                    if ((status = info->read_memory_func (addr, buffer, 3, info))) {
+                        info->memory_error_func (status, addr, info);
+                        return -1;
+                    }
+                    
+                    
+                    fpr(stream,"%s ",opcodes[x].name);
+                    print_gpr_fpr(info,buffer[1]);
+                    fpr(stream,"%s",",");
+
+                    print_gpr_fpr(info,buffer[2]);
+                    fpr(stream,"%s","\n");
+
+                    return 3;
+                }
+            }
+          
+            return 3;
+    }
+    
+    
+              fpr(stream,"fatal : cannot find opcode %d ",*buffer);
+
+    return -1;
+
+}
 }

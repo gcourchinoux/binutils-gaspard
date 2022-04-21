@@ -217,6 +217,7 @@ void dispal_read(struct opcode_chiara *s) {
 
 
 }
+// controler les valeurs des opcodes par rapport au livre 
 struct opcode_chiara opcodes [] = {
 
   {"or",10,2,or},
@@ -225,14 +226,17 @@ struct opcode_chiara opcodes [] = {
   {"not",11,1,not},
   {"shfl",18,2,shfl},
   {"shfr",13,2,shfr},
-
   {"mult",7,2,mult},
   {"add",46,2,add},
   {"addc",26,2,addc},
   {"sub",5,2,sub},
   {"subc",27,2,subc},
   {"inc",4,1,inc},
+<<<<<<< HEAD
   {"dec",153,1,dec},
+=======
+  {"dec",34,1,dec},
+>>>>>>> ef8a00d59b8d96fb2f356035ec8ff69f50a1716b
   {"modul",25,2,modul},
   {"div",28,2,div_},
   {"divs",29,2,divs},
@@ -254,12 +258,12 @@ struct opcode_chiara opcodes [] = {
   {"callrz",22,1,callrz},
   {"callrc",23,1,callrc},
   {"callro",24,1,callro},
-  {"dispab",112,1,dispab},
-  {"dispab",111,1,dispab_read},
-  {"dispas",40,1,dispas_write},
-  {"dispas",41,1,dispas_read},
-  {"dispal",45,1,dispal_write},
-  {"dispal",47,1,dispal_read},
+  {"dispab_write",112,1,dispab},
+  {"dispab_read",111,1,dispab_read},
+  {"dispas_write",40,1,dispas_write},
+  {"dispas_read",41,1,dispas_read},
+  {"dispal_write",45,1,dispal_write},
+  {"dispal_read",47,1,dispal_read},
 
 };
 
