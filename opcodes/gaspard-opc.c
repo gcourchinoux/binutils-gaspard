@@ -232,11 +232,7 @@ struct opcode_chiara opcodes [] = {
   {"sub",5,2,sub},
   {"subc",27,2,subc},
   {"inc",4,1,inc},
-<<<<<<< HEAD
   {"dec",153,1,dec},
-=======
-  {"dec",34,1,dec},
->>>>>>> ef8a00d59b8d96fb2f356035ec8ff69f50a1716b
   {"modul",25,2,modul},
   {"div",28,2,div_},
   {"divs",29,2,divs},
