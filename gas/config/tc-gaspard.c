@@ -426,7 +426,7 @@ while(*str != '\0') {
 
             bool ok =false;
 struct opcode_chiara tmp ;
-      for(int x =0;x<40;x++) {
+      for(int x =0;x<43;x++) {
 
 // parcourir les instructions 
 
@@ -551,21 +551,12 @@ struct opcode_chiara tmp ;
                 output[0] = tmp.opcode;
               //  md_number_to_chars (output, 0, 1);
 
-            } else if(op == 18) {
-                // calle
-                output = frag_more(9);
-                output[0] = tmp.opcode;
+            } else if(op == 151) {
+                // bne
+               
                 unsigned char *nombre = build_argv(str);
                 str+= strlen(nombre);
-                unsigned long long number = gaspard_atol(nombre);
-                output[1] = number;
-                output[2] = number << 8;
-                output[3] = number << 16;
-                output[4] = number << 24;
-                output[5] = number << 32;
-                output[6] = number << 40;
-                output[7] = number << 48;
-                output[8] = number << 56;
+               printf("nombre bne %s \n",nombre);
                // md_number_to_chars (output, 0, 9);
 
                 
